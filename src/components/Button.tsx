@@ -1,29 +1,39 @@
 import React from 'react';
 
-type ButtonProps = {
-  children: React.ReactNode;
-  onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
+type Variant = 'primary' | 'secondary' | 'danger';
+type Size = 'sm' | 'md' | 'lg';
+
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: Variant;
+  size?: Size;
 };
 
 export default function Button({
   children,
-  onClick,
-  type = 'button',
+  variant = 'primary',
+  size = 'md',
+  className = '',
+  ...props
 }: ButtonProps) {
+  const base =
+    'font-semibold rounded transition focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed';
+
+  const variants = {
+    primary: 'bg-blue-600 text-white hover:brightness-90',
+    secondary: 'bg-gray-200 text-black hover:bg-gray-300',
+    danger: 'bg-red-600 text-white hover:brightness-90',
+  };
+
+  const sizes = {
+    sm: 'px-3 py-1 text-sm',
+    md: 'px-4 py-2 text-base',
+    lg: 'px-6 py-3 text-lg',
+  };
+
+  const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
+
   return (
-    <button
-      type={type}
-      onClick={onClick}
-      style={{
-        padding: '8px 16px',
-        backgroundColor: '#2563eb',
-        color: 'white',
-        border: 'none',
-        borderRadius: '6px',
-        cursor: 'pointer',
-      }}
-    >
+    <button className={classes} {...props}>
       {children}
     </button>
   );
